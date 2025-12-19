@@ -1,4 +1,4 @@
-# مشروع ربط مودل EfficientNetV2-S بتطبيق Flutter عبر FastAPI
+# SmartChecker: نظام التحقق من الدفع وسمعة العملاء في الوقت الفعلي
 
 هذا المشروع يقدم حلاً كاملاً لربط مودل تصنيف صور (Image Classification Model) مبني على PyTorch/EfficientNetV2-S بتطبيق موبايل Flutter، وذلك باستخدام واجهة برمجية (API) مبنية على إطار عمل **FastAPI** في Python.
 
