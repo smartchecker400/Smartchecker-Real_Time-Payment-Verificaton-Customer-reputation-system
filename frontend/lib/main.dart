@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 // -----------------------------------------------------------------------------
 // Configuration
 // -----------------------------------------------------------------------------
+<<<<<<< HEAD
 // Dynamic API base URL based on platform to handle localhost/emulator differences
 final String apiBaseUrl = () {
   if (kIsWeb) {
@@ -22,6 +23,9 @@ final String apiBaseUrl = () {
   }
 }();
 
+=======
+const String apiBaseUrl = 'http://10.0.2.2:8000'; 
+>>>>>>> 1569809 (FEAT: Improve Flutter UI for professional look (SmartChecker theme))
 const String predictEndpoint = '/predict';
 
 void main() {
@@ -34,12 +38,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'AI Inference App',
+      title: 'SmartChecker',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
+<<<<<<< HEAD
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1565C0)),
         textTheme: GoogleFonts.interTextTheme(),
         visualDensity: VisualDensity.adaptivePlatformDensity,
+=======
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade800),
+        useMaterial3: true,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.blue.shade800,
+          foregroundColor: Colors.white,
+          centerTitle: true,
+        ),
+>>>>>>> 1569809 (FEAT: Improve Flutter UI for professional look (SmartChecker theme))
       ),
       home: const InferenceScreen(),
     );
@@ -59,6 +74,7 @@ class _InferenceScreenState extends State<InferenceScreen> {
   String _predictionResult = 'No image selected.';
   bool _isLoading = false;
   final ImagePicker _picker = ImagePicker();
+  Map<String, dynamic>? _predictionData;
 
   // ---------------------------------------------------------------------------
   // Image Picking Logic
@@ -70,15 +86,22 @@ class _InferenceScreenState extends State<InferenceScreen> {
     if (pickedFile != null) {
       final bytes = await pickedFile.readAsBytes();
       setState(() {
+<<<<<<< HEAD
         if (!kIsWeb) {
           _image = File(pickedFile.path);
         }
         _imageBytes = bytes;
         _predictionResult = 'Image selected. Ready to predict.';
+=======
+        _image = File(pickedFile.path);
+        _predictionResult = 'Image selected. Ready to verify.';
+        _predictionData = null;
+>>>>>>> 1569809 (FEAT: Improve Flutter UI for professional look (SmartChecker theme))
       });
     } else {
       setState(() {
         _predictionResult = 'No image selected.';
+        _predictionData = null;
       });
     }
   }
@@ -96,14 +119,15 @@ class _InferenceScreenState extends State<InferenceScreen> {
 
     setState(() {
       _isLoading = true;
-      _predictionResult = 'Uploading and predicting...';
+      _predictionResult = 'Verifying payment slip...';
+      _predictionData = null;
     });
 
     try {
-      // 1. Create a multipart request
       var uri = Uri.parse('$apiBaseUrl$predictEndpoint');
       var request = http.MultipartRequest('POST', uri);
 
+<<<<<<< HEAD
       // 2. Attach the image file
       // The field name 'file' must match the parameter name in the FastAPI endpoint:
       // async def predict_image(file: UploadFile = File(...)):
@@ -119,15 +143,19 @@ class _InferenceScreenState extends State<InferenceScreen> {
           _image!.path,
         ));
       }
+=======
+      request.files.add(await http.MultipartFile.fromPath(
+        'file', 
+        _image!.path,
+      ));
+>>>>>>> 1569809 (FEAT: Improve Flutter UI for professional look (SmartChecker theme))
 
-      // 3. Send the request
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      // 4. Process the response
       if (response.statusCode == 200) {
-        // Successful response
         final result = jsonDecode(response.body);
+<<<<<<< HEAD
 
         // Format the result for display
         String label = result['predicted_label'] ?? 'N/A';
@@ -138,20 +166,30 @@ class _InferenceScreenState extends State<InferenceScreen> {
           _predictionResult = 'Prediction: $label\n'
               'Fake Probability: ${(probFake * 100).toStringAsFixed(2)}%\n'
               'Real Probability: ${(probReal * 100).toStringAsFixed(2)}%';
+=======
+        
+        setState(() {
+          _predictionData = result;
+          _predictionResult = 'Verification Complete.';
+>>>>>>> 1569809 (FEAT: Improve Flutter UI for professional look (SmartChecker theme))
         });
       } else {
-        // Error response from the server
         final errorBody = jsonDecode(response.body);
         String detail = errorBody['detail'] ?? 'Unknown error';
         setState(() {
           _predictionResult = 'Error (${response.statusCode}): $detail';
+          _predictionData = null;
         });
       }
     } catch (e) {
-      // Network or other exception
       setState(() {
         _predictionResult = 'Network Error: Failed to connect to API.\n'
+<<<<<<< HEAD
             'Please check if the API is running at $apiBaseUrl and if the IP is correct.';
+=======
+                            'Check if the API is running at $apiBaseUrl and if the IP is correct.';
+        _predictionData = null;
+>>>>>>> 1569809 (FEAT: Improve Flutter UI for professional look (SmartChecker theme))
       });
     } finally {
       setState(() {
@@ -167,17 +205,22 @@ class _InferenceScreenState extends State<InferenceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+<<<<<<< HEAD
         title: Text(
           'AI Image Classifier',
           style: GoogleFonts.inter(fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
         elevation: 2,
+=======
+        title: const Text('SmartChecker Verification'),
+>>>>>>> 1569809 (FEAT: Improve Flutter UI for professional look (SmartChecker theme))
       ),
       backgroundColor: Colors.grey[50],
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
         child: Center(
+<<<<<<< HEAD
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 900),
             child: Column(
@@ -332,8 +375,200 @@ class _InferenceScreenState extends State<InferenceScreen> {
                 ),
               ],
             ),
+=======
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              // 1. Image Display Area
+              _buildImageDisplay(context),
+              
+              const SizedBox(height: 24),
+
+              // 2. Action Buttons
+              _buildActionButtons(context),
+              
+              const SizedBox(height: 30),
+
+              // 3. Result Display
+              _buildResultDisplay(context),
+            ],
+>>>>>>> 1569809 (FEAT: Improve Flutter UI for professional look (SmartChecker theme))
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildImageDisplay(BuildContext context) {
+    return Container(
+      height: 300,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHigh,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.5), width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: _image == null
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.receipt_long, size: 60, color: Colors.grey.shade400),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Payment Slip Preview',
+                    style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
+                  ),
+                ],
+              ),
+            )
+          : ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.file(
+                _image!,
+                fit: BoxFit.contain,
+              ),
+            ),
+    );
+  }
+
+  Widget _buildActionButtons(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Select Image Button
+        Expanded(
+          child: FilledButton.icon(
+            onPressed: _pickImage,
+            icon: const Icon(Icons.photo_library),
+            label: const Text('Select Slip'),
+            style: FilledButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+        ),
+        
+        const SizedBox(width: 16),
+
+        // Predict Button
+        Expanded(
+          child: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : ElevatedButton.icon(
+                  onPressed: _image != null ? _uploadImageAndPredict : null,
+                  icon: const Icon(Icons.verified_user),
+                  label: const Text('Verify Payment'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green.shade700,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildResultDisplay(BuildContext context) {
+    if (_predictionData == null) {
+      return Text(
+        _predictionResult,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 16,
+          color: _predictionResult.startsWith('Error') ? Colors.red : Colors.grey.shade600,
+        ),
+      );
+    }
+
+    String label = _predictionData!['predicted_label'] ?? 'N/A';
+    double probFake = _predictionData!['probabilities']['Fake'] ?? 0.0;
+    double probReal = _predictionData!['probabilities']['Real'] ?? 0.0;
+    
+    Color resultColor = label == 'Real' ? Colors.green.shade700 : Colors.red.shade700;
+    IconData resultIcon = label == 'Real' ? Icons.check_circle : Icons.cancel;
+
+    return Card(
+      elevation: 8,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(resultIcon, size: 36, color: resultColor),
+                const SizedBox(width: 10),
+                Text(
+                  'Verification Status',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ],
+            ),
+            const Divider(height: 20),
+            
+            // Main Prediction Result
+            Center(
+              child: Text(
+                label == 'Real' ? 'AUTHENTIC' : 'FRAUDULENT',
+                style: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.w900,
+                  color: resultColor,
+                ),
+              ),
+            ),
+            const Divider(height: 20),
+
+            // Probability Details
+            _buildProbabilityRow('Real Payment Probability', probReal, Colors.green),
+            _buildProbabilityRow('Fake Payment Probability', probFake, Colors.red),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProbabilityRow(String title, double probability, Color color) {
+    String percentage = (probability * 100).toStringAsFixed(2);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
+          ),
+          Text(
+            '$percentage%',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
+        ],
       ),
     );
   }
