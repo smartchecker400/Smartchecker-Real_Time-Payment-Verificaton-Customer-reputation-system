@@ -1,6 +1,6 @@
-# SmartChecker: نظام التحقق من الدفع وسمعة العملاء في الوقت الفعلي
+# SmartChecker:Real-Time Paymet Verification & Customer Repotation System 
 
-هذا المشروع يقدم حلاً كاملاً لربط مودل تصنيف صور (Image Classification Model) مبني على PyTorch/EfficientNetV2-S بتطبيق موبايل Flutter، وذلك باستخدام واجهة برمجية (API) مبنية على إطار عمل **FastAPI** في Python.
+هذا المشروع يقدم حلاً كاملاً لربط مودل تصنيف صور (Image Classification Model) مبني على PyTorch/EfficientNetV2-S بتطبيق ويب Flutter، وذلك باستخدام واجهة برمجية (API) مبنية على إطار عمل **FastAPI** في Python.
 
 ## محتويات المشروع
 
@@ -25,13 +25,13 @@ pip install torch torchvision fastapi uvicorn python-multipart pillow
 
 | الملف | الوصف |
 | :--- | :--- |
-| \`effv2s_fold5.pt\` | **ملف المودل الخاص بكم.** يجب وضعه في نفس مجلد ملفات Python. |
+| \`effv2s_fold5.pt\` | **ملف المودل .** يجب وضعه في نفس مجلد ملفات Python. |
 | \`model_inference.py\` | يحتوي على منطق تحميل المودل، تعريف بنية المودل (\`create_model\`)، وتحويل الصورة (\`ResizePadToSquare\` و \`get_inference_transform\`)، وتشغيل الـ Inference (\`ImagePredictor\`). |
 | \`main.py\` | يحتوي على تطبيق FastAPI. يقوم بتحميل المودل مرة واحدة عند بدء التشغيل، ويحتوي على مسار \`/predict\` الذي يستقبل الصورة. |
 
 ### كيفية التشغيل
 
-1.  **تأكد** من أن ملف المودل \`effv2s_fold5.pt\` موجود في نفس المجلد مع \`main.py\` و \`model_inference.py\`.
+1.  **التأكد** من أن ملف المودل \`effv2s_fold5.pt\` موجود في نفس المجلد مع \`main.py\` و \`model_inference.py\`.
 2.  قم بتشغيل الخادم باستخدام \`uvicorn\`:
 
     \`\`\`bash
@@ -108,11 +108,11 @@ const String apiBaseUrl = 'http://10.0.2.2:8000';
 
 ## 3. الكود المرفق
 
-تم إنشاء الملفات التالية لكم:
+تم إنشاء الملفات التالية:
 
 *   \`main.py\`
 *   \`model_inference.py\`
 *   \`flutter_app/pubspec.yaml\`
 *   \`flutter_app/lib/main.dart\`
 
-يمكنكم استخدام هذه الملفات مباشرة في مشروعكم. بالتوفيق في مشروع التخرج!
+يمكن استخدام هذه الملفات مباشرة وتشغيل المشروع!
